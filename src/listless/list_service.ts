@@ -4,6 +4,7 @@ import * as ed from "@noble/ed25519";
 
 import { ListRecord } from "./list_record";
 import { verifyMutation } from "./verify";
+import { ItemsService } from "./items_service";
 
 
 export class ListService {
@@ -36,6 +37,19 @@ export class ListService {
                 createdAt: rows[0].created_at,
             };
         }
+    }
+
+    /**
+     * Adjust a list's items.
+     * @param id of the list adjust the items of
+     * @returns items service that can modify the retrieved list
+     */
+    items(id: string): ItemsService | null {
+        const record = this.get(id);
+        if (record === null) {
+            return null;
+        }
+        return new ItemsService(record, this.db, this.verify);
     }
 
     /**
