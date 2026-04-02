@@ -22,9 +22,6 @@ const defaults: Options = {
 
 export function getDb(options: Partial<Options> = {}): Database.Database {
     const opts = { ...defaults, ...options };
-    if (opts.filename === IN_MEMORY) {
-        console.warn("Using an in-memory database. Set LISTLESS_DB_FILENAME env var to adjust");
-    }
 
     if (dbs[opts.filename]) {
         if (opts.reset) {
@@ -40,9 +37,13 @@ export function getDb(options: Partial<Options> = {}): Database.Database {
     if (opts.filename !== IN_MEMORY) {
         fs.mkdirSync(path.dirname(opts.filename), { recursive: true });
     }
+    else {
+        console.warn("Using an in-memory database. Set LISTLESS_DB_FILENAME env var to adjust");
+    }
 
     dbs[opts.filename] = new Database(opts.filename, {});
     dbs[opts.filename].pragma("journal_mode = WAL");
+    dbs[opts.filename].pragma("foreign_keys = ON");
     runMigrations(dbs[opts.filename]);
     return dbs[opts.filename];
 }
