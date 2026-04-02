@@ -9,7 +9,7 @@ export default defineConfig({
     },
     server: {
         plugins: [
-            "src/server-plugins/db.ts",
+            "src/server-plugins/listless.ts",
         ],
     },
 });
