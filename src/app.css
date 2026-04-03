@@ -1,18 +1,24 @@
 @import "tailwindcss";
 
-:root {
-  --background-rgb: 214, 219, 220;
-  --foreground-rgb: 0, 0, 0;
-}
+@theme {
+    --color-background: #0d001a;            /* Main page background */
+    --color-foreground: #dbd7df;            /* Main default text color */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background-rgb: 0, 0, 0;
-    --foreground-rgb: 255, 255, 255;
-  }
-}
+    --color-primary: #8b5cf6;               /* Main buttons, active nav items */
+    --color-primary-foreground: #ffffff;    /* Text that sits ON TOP of primary */
 
-body {
-  background: rgb(var(--background-rgb));
-  color: rgb(var(--foreground-rgb));
+    --color-secondary: #334155;             /* Secondary buttons, less important UI */
+    --color-secondary-foreground: #f8f9fa;  /* Text on secondary elements */
+
+    --color-muted: #1e293b;                 /* Subtle backgrounds, disabled states */
+    --color-muted-foreground: #94a3b8;      /* De-emphasized text, placeholders */
+
+    --color-surface: #20112c;               /* Cards, dropdowns, modals */
+    --color-border: #3f3f46;                /* Default border lines and dividers */
+
+    --color-accent: #d946ef;                /* Focus rings, call-outs, special highlights */
+    --color-accent-foreground: #ffffff;     /* Text inside highlighted areas */
+
+    --color-error: #ef4444;                 /* Error messages, destructive actions */
+    --color-success: #22c55e;               /* Success messages, checks */
 }
