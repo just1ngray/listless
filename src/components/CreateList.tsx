@@ -20,11 +20,14 @@ export function CreateList() {
     e.preventDefault();
     setCreatingFlag(true);
 
+    const redirect = new URLSearchParams();
+
     let listE2eKey: CryptoKey | null = null;
     let reqName = name();
     if (e2e()) {
       listE2eKey = await e2ekey.generateKey();
       reqName = await e2ekey.encrypt(reqName, listE2eKey);
+      redirect.append("e2e", await e2ekey.exportKey(listE2eKey));
     }
 
     let listMutKeyPriv: ed.Bytes | null = null;
@@ -33,6 +36,7 @@ export function CreateList() {
       listMutKeyPriv = ed.utils.randomSecretKey();
       const pub = await ed.getPublicKeyAsync(listMutKeyPriv);
       listMutKeyPub = toBase64(pub);
+      redirect.append("mut", toBase64(listMutKeyPriv));
     }
 
     const res = await fetch("/api/lists", {
@@ -51,7 +55,9 @@ export function CreateList() {
 
     const body = await res.json() as any as { listId: string };
 
-    navigate(`/join/${body.listId}#...`);
+    navigate(`/join/${body.listId}#${redirect.toString()}`, {
+      state: { hash: redirect.toString() }
+    });
   }
 
   return (
