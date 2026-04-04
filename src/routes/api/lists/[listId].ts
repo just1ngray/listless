@@ -8,7 +8,7 @@ import { listService } from "~/listless";
 /**
  * Get a list and all of its items.
  *
- * GET /api/lists/[id]
+ * GET /api/lists/[listId]
  *
  * 200 - {
  *      "id": "id",
@@ -18,7 +18,7 @@ import { listService } from "~/listless";
  * }
  */
 export function GET(event: APIEvent) {
-    const requestedId = event.params["id"];
+    const requestedId = event.params["listId"];
     const listRecord = listService.get(requestedId);
     if (listRecord === null) {
         return json("Not found", { status: 404 });

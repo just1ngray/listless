@@ -1,10 +1,14 @@
 import { useParams } from "@solidjs/router";
 import { For } from "solid-js";
 import { createResource, Suspense } from "solid-js";
+import * as ed from "@noble/ed25519";
 
 import { Card } from "~/components/Card";
 import * as e2ekey from "~/util/e2e-encrypt";
 import { getList } from "~/util/localstorage";
+import { fromBase64, toBase64 } from "~/util/buffers";
+import { ItemsService } from "~/listless/items_service";
+import { SimpleItem } from "~/components/items/SimpleItem";
 
 
 async function fetchList(listId: string) {
@@ -46,9 +50,110 @@ export default function List() {
   const params = useParams();
   const listId = params.listId as string;
 
-  const [data] = createResource(async () => await fetchList(listId), {
-    initialValue: undefined,
-  });
+  const [data, { refetch, mutate }] = createResource(async () => await fetchList(listId));
+
+  async function deleteItem(itemId: number) {
+    const list = getList(listId)!;
+
+    const headers: Record<string, string> = {};
+    if (list.mut !== null) {
+      const signature = await ed.signAsync(
+        ItemsService.delete_messageToSign(BigInt(itemId)),
+        fromBase64(list.mut)
+      );
+      headers["X-Signature"] = toBase64(signature);
+    }
+
+    const res = await fetch(`/api/lists/${listId}/items/${itemId}`, { method: "DELETE", headers });
+    if (res.status !== 200) {
+      throw new Error(`Could not delete item: ${await res.text()}`);
+    }
+
+    mutate(prev => prev && ({
+      ...prev,
+      items: prev.items.filter(item => item.id != itemId)
+    }));
+  }
+
+  async function updateItem(itemId: number, item: string) {
+    const list = getList(listId)!;
+
+    let itemPayloadStr = btoa(item);
+    if (list.e2e !== null) {
+      itemPayloadStr = btoa(await e2ekey.encrypt(
+        item,
+        await e2ekey.importKey(list.e2e),
+      ));
+    }
+    const itemPayload = fromBase64(itemPayloadStr);
+
+    const headers: Record<string, string> = {};
+    if (list.mut !== null) {
+      const signature = await ed.signAsync(
+        ItemsService.set_messageToSign(BigInt(itemId), itemPayload),
+        fromBase64(list.mut)
+      );
+      headers["X-Signature"] = toBase64(signature);
+    }
+
+    const res = await fetch(`/api/lists/${listId}/items/${itemId}`, {
+      method: "PUT",
+      headers,
+      body: JSON.stringify({
+        item: itemPayloadStr,
+      }),
+    });
+    if (res.status !== 200) {
+      throw new Error(`Could not update item: ${await res.text()}`);
+    }
+
+    mutate(prev => prev && ({
+      ...prev,
+      items: prev.items.map(i => ({ id: i.id, item: i.id == itemId ? item : i.item }))
+    }));
+  }
+
+  async function addItem(item: string) {
+    const list = getList(listId)!;
+
+    let itemPayloadStr = btoa(item);
+    if (list.e2e !== null) {
+      itemPayloadStr = btoa(await e2ekey.encrypt(
+        item,
+        await e2ekey.importKey(list.e2e),
+      ));
+    }
+    const itemPayload = fromBase64(itemPayloadStr);
+
+    const headers: Record<string, string> = {};
+    if (list.mut !== null) {
+      const signature = await ed.signAsync(
+        itemPayload,
+        fromBase64(list.mut)
+      );
+      headers["X-Signature"] = toBase64(signature);
+    }
+
+    const res = await fetch(`/api/lists/${listId}/items`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        item: itemPayloadStr,
+      }),
+    });
+    if (res.status !== 200) {
+      throw new Error(`Could not update item: ${await res.text()}`);
+    }
+    const json = await res.json() as { itemId: number };
+
+    mutate(prev => prev && ({
+      ...prev,
+      items: [
+        ...prev.items,
+        { id: json.itemId, item }
+      ]
+    }));
+  }
 
   return (
     <Card>
@@ -56,8 +161,30 @@ export default function List() {
         <h1 class="text-2xl">{data()?.name}</h1>
 
         <For each={data()?.items}>
-          {item => <p>{item.item}</p>}
+          {item => (
+            <div class="bg-background p-2 my-1 rounded-md border border-border border-dashed">
+              <SimpleItem
+                text={item.item}
+                del={() => deleteItem(item.id)}
+                set={(newVal) => updateItem(item.id, newVal)}
+              />
+            </div>
+          )}
         </For>
+
+        <div class="bg-background p-2 my-1 rounded-md border border-border border-dashed">
+          <div class="flex flex-row items-center gap-2">
+            <div>Add item</div>
+            <div class="grow border-b border-border">
+              <SimpleItem
+                text={""}
+                del={() => Promise.resolve()}
+                set={(newVal) => addItem(newVal)}
+              />
+            </div>
+          </div>
+        </div>
+
       </Suspense>
     </Card>
   );

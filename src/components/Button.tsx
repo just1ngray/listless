@@ -4,7 +4,7 @@ export function Button(props: ParentProps & {
   col: "primary" | "secondary" | "highlight" | "muted",
   disabled?: boolean,
   type?: "reset" | "submit" | "button" | "menu" | undefined,
-  onClick?: () => {},
+  onClick?: () => void,
 }) {
   const col = () => ({
     primary: "bg-primary text-primary-foreground",

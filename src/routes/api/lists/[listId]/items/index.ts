@@ -31,7 +31,6 @@ export async function POST(event: APIEvent) {
     const headerSig = event.request.headers.get("X-Signature");
     const signature = headerSig === null ? null : Buffer.from(headerSig, "base64");
 
-
     try {
         const items = listService.items(listId)!;
         const itemId = await items.add(item, signature);

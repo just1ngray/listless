@@ -80,7 +80,11 @@ export class ItemsService {
     }
 
     static set_messageToSign(id: bigint, item: Uint8Array): Uint8Array {
-        return Buffer.concat([bigintToUint8Array(id), item]);
+        const idBytes = bigintToUint8Array(id);
+        const result = new Uint8Array(idBytes.length + item.length);
+        result.set(idBytes);
+        result.set(item, idBytes.length);
+        return result;
     }
 
     static validateItem(item: Uint8Array): void {
