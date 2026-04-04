@@ -12,4 +12,5 @@ export default defineConfig({
             "src/server-plugins/listless.ts",
         ],
     },
+    ssr: false,
 });
