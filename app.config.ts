@@ -1,5 +1,11 @@
+import path from "path";
+import { fileURLToPath } from "url";
+
 import { defineConfig } from "@solidjs/start/config";
 import tailwindcss from "@tailwindcss/vite";
+
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
     vite: {
@@ -9,7 +15,7 @@ export default defineConfig({
     },
     server: {
         plugins: [
-            "src/server-plugins/listless.ts",
+            path.resolve(__dirname, "src/server-plugins/listless.ts"),
         ],
     },
     ssr: false,
