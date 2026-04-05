@@ -2,6 +2,8 @@
 
 Listless is an end-to-end encrypted list app with protected access and no logins.
 
+> Project Status: Proof of concept level polish but fully serves my purposes
+
 ## Motivation
 
 I want to have a shared grocery list for my household, but shockingly neither Apple Reminders nor Microsoft Todo
