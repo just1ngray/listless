@@ -15,6 +15,12 @@ export function addList(list: LocalStorageList) {
     localStorage.setItem("lists", JSON.stringify(lists));
 }
 
+export function removeList(id: string) {
+    const lists = getLists()
+        .filter(list => list.id !== id);
+    localStorage.setItem("lists", JSON.stringify(lists));
+}
+
 export function getList(listId: string): LocalStorageList | null {
     const lists = getLists();
     for (const list of lists) {
