@@ -2,7 +2,13 @@ import { A, useParams } from "@solidjs/router";
 import { For } from "solid-js";
 import { createResource, Suspense } from "solid-js";
 import * as ed from "@noble/ed25519";
-import { HiOutlineShare, HiOutlineTrash, HiOutlinePencilSquare, HiSolidArrowLeft } from "solid-icons/hi";
+import {
+  HiOutlineShare,
+  HiOutlineTrash,
+  HiOutlinePencilSquare,
+  HiSolidArrowLeft,
+  HiOutlineArrowPath,
+} from "solid-icons/hi";
 
 import { Card } from "~/components/Card";
 import * as e2ekey from "~/util/e2e-encrypt";
@@ -175,6 +181,11 @@ export default function List() {
           <div class="flex flex-row items-items-start justify-between">
             <h1 class="text-2xl">{data()?.name}</h1>
             <div class="flex flex-row gap-2">
+              <HiOutlineArrowPath
+                size={20}
+                class="cursor-pointer"
+                onClick={refetch}
+              />
               <HiOutlinePencilSquare
                 size={20}
                 class="cursor-pointer"
