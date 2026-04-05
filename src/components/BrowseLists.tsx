@@ -46,7 +46,7 @@ export function BrowseLists() {
 
   return (
     <div>
-      <h2 class="text-xl p-2">Lists</h2>
+      <h2 class="text-xl pb-2">Your Lists</h2>
 
       <Suspense fallback="Loading...">
         <For each={lists()} fallback={<p class="text-muted-foreground text-sm">No lists</p>}>
