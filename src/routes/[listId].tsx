@@ -2,6 +2,7 @@ import { useParams } from "@solidjs/router";
 import { For } from "solid-js";
 import { createResource, Suspense } from "solid-js";
 import * as ed from "@noble/ed25519";
+import { HiOutlineShare, HiOutlineTrash, HiOutlinePencilSquare } from "solid-icons/hi";
 
 import { Card } from "~/components/Card";
 import * as e2ekey from "~/util/e2e-encrypt";
@@ -9,6 +10,8 @@ import { getList } from "~/util/localstorage";
 import { fromBase64, toBase64 } from "~/util/buffers";
 import { ItemsService } from "~/listless/items_service";
 import { SimpleItem } from "~/components/items/SimpleItem";
+import { useModal } from "~/components/Modal";
+import { EditListName } from "~/components/EditListName";
 
 
 async function fetchList(listId: string) {
@@ -47,6 +50,7 @@ async function fetchList(listId: string) {
 }
 
 export default function List() {
+  const modal = useModal();
   const params = useParams();
   const listId = params.listId as string;
 
@@ -158,7 +162,22 @@ export default function List() {
   return (
     <Card>
       <Suspense fallback={<p>Loading...</p>}>
-        <h1 class="text-2xl">{data()?.name}</h1>
+
+        <div class="flex flex-row items-items-start justify-between">
+          <h1 class="text-2xl">{data()?.name}</h1>
+          <div class="flex flex-row gap-2">
+            <HiOutlinePencilSquare
+              size={20}
+              class="cursor-pointer"
+              onClick={() => modal.display(
+                "Edit list name",
+                () => <EditListName currentName={data()!.name} id={listId} />
+              )}
+            />
+            <HiOutlineShare size={20} />
+            <HiOutlineTrash size={20} />
+          </div>
+        </div>
 
         <For each={data()?.items}>
           {item => (

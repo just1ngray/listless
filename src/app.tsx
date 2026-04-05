@@ -3,6 +3,7 @@ import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 import { Suspense } from "solid-js";
 import "./app.css";
+import { ModalProvider } from "./components/Modal";
 
 
 export default function App() {
@@ -14,7 +15,9 @@ export default function App() {
           <Meta name="description" content="E2e encrypted no login list app that supports protected lists and multi-client syncing" />
 
           <div class="min-h-dvh bg-background text-foreground flex flex-col font-sans">
-            <Suspense>{props.children}</Suspense>
+            <ModalProvider>
+              <Suspense>{props.children}</Suspense>
+            </ModalProvider>
           </div>
         </MetaProvider>
       )}

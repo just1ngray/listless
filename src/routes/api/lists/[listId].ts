@@ -45,14 +45,14 @@ const RenameSchema = z.object({
 /**
  * Rename a list.
  *
- * PATCH /api/lists/[id]
+ * PATCH /api/lists/[listId]
  * { "newName": "base64 encoded bytes" }
  * H["X-Signature"] = undefined | "base64 ed25519 signature bytes of the newName"
  *
  * 200 - {}
  */
 export async function PATCH(event: APIEvent) {
-    const id = event.params["id"];
+    const id = event.params["listId"];
     const body = await new Response(event.request.body).json();
     const parsed = RenameSchema.safeParse(body);
     if (parsed.error) {
@@ -78,13 +78,13 @@ export async function PATCH(event: APIEvent) {
 /**
  * Deletes a list by its id
  *
- * DELETE /api/lists/[id]
+ * DELETE /api/lists/[listId]
  * H["X-Signature"] = undefined | "base64 encoded signature of the id being deleted"
  *
  * 200 - {}
  */
 export async function DELETE(event: APIEvent) {
-    const id = event.params["id"];
+    const id = event.params["listId"];
     const sigHeader = event.request.headers.get("X-Signature");
     const signature = sigHeader === null ? null : Buffer.from(sigHeader, "base64");
 
