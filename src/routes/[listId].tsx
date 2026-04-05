@@ -43,7 +43,7 @@ async function fetchList(listId: string) {
 
   return {
     id: body.id,
-    name: await decrypt(atob(body.name)),
+    name: await decrypt(atob(body.name)) || "Unnamed list",
     createdAt: body.createdAt,
     items: await Promise.all(
       body.items.map(async ({ id, item }) => ({ id, item: await decrypt(atob(item)) }))

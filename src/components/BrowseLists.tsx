@@ -37,7 +37,7 @@ export function BrowseLists() {
       fetched.push({
         id: json.id,
         size: json.items.length,
-        name: name,
+        name: name || "Unnamed list",
       });
     }
 

@@ -23,7 +23,7 @@ export function CreateList() {
     const redirect = new URLSearchParams();
 
     let listE2eKey: CryptoKey | null = null;
-    let reqName = name();
+    let reqName = name() || `New list (${new Date().toLocaleDateString()})`;
     if (e2e()) {
       listE2eKey = await e2ekey.generateKey();
       reqName = await e2ekey.encrypt(reqName, listE2eKey);
