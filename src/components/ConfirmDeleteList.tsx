@@ -5,7 +5,7 @@ import { getList } from "~/util/localstorage";
 import { fromBase64, toBase64 } from "~/util/buffers";
 
 
-export function ConfirmDeleteList(props: { id: string }) {
+export function ConfirmDeleteList(props: { id: string }) {1
   async function submit(e: SubmitEvent) {
     e.preventDefault();
 
@@ -28,7 +28,7 @@ export function ConfirmDeleteList(props: { id: string }) {
       throw new Error(await res.text());
     }
 
-    alert("Deleted. Handle better.");
+    window.location.href = "/";
   }
 
   return (
