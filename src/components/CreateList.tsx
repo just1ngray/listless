@@ -62,7 +62,7 @@ export function CreateList() {
 
   return (
     <div>
-      <h1 class="text-xl">Create new list</h1>
+      <h1 class="text-xl">Create a New List</h1>
 
       <form onSubmit={onSubmit}>
         <TextInput label="List name" maxlen={64} value={name()} onInput={n => setName(n)} />

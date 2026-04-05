@@ -162,13 +162,13 @@ export default function List() {
   }
 
   return (
-    <>
-      <header class="bg-surface border-b border-border p-4 shadow-sm flex items-center justify-between">
+    <div class="flex flex-col gap-2">
+      <Card>
         <A href="/" class="font-bold text-2xl flex gap-2 items-center">
           <HiSolidArrowLeft size={24} />
           Listless
         </A>
-      </header>
+      </Card>
       <Card>
         <Suspense fallback={<p>Loading...</p>}>
 
@@ -229,6 +229,6 @@ export default function List() {
 
         </Suspense>
       </Card>
-    </>
+    </div>
   );
 }
