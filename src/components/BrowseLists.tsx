@@ -49,7 +49,7 @@ export function BrowseLists() {
       <h2 class="text-xl p-2">Lists</h2>
 
       <Suspense fallback="Loading...">
-        <For each={lists()} fallback={<p class="text-muted-foreground">None</p>}>
+        <For each={lists()} fallback={<p class="text-muted-foreground text-sm">No lists</p>}>
           {list => (
             <A href={`/${list.id}`}
               class="
