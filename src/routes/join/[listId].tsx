@@ -34,7 +34,7 @@ export default function Import() {
       e2e: e2ekey,
       mut: mutkey,
     });
-    navigate(`/${listId}`);
+    navigate(`/lists/${listId}`);
   });
 
   return (
@@ -44,7 +44,7 @@ export default function Import() {
           Importing list <span class="font-mono border border-border rounded p-1">{listId}</span>...
         </div>
         <div class="mt-2">
-          You will be redirected to the list in a moment. Or click <A class="underline" href={`/${listId}`}>here</A>
+          You will be redirected to the list in a moment. Or click <A class="underline" href={`/lists/${listId}`}>here</A>
         </div>
       </Card>
     </div>
