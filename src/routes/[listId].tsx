@@ -13,6 +13,7 @@ import { SimpleItem } from "~/components/items/SimpleItem";
 import { useModal } from "~/components/Modal";
 import { EditListName } from "~/components/EditListName";
 import { ConfirmDeleteList } from "~/components/ConfirmDeleteList";
+import { ShareList } from "~/components/ShareList";
 
 
 async function fetchList(listId: string) {
@@ -182,7 +183,14 @@ export default function List() {
                   () => <EditListName currentName={data()!.name} id={listId} />
                 )}
               />
-              <HiOutlineShare size={20} />
+              <HiOutlineShare
+                size={20}
+                class="cursor-pointer"
+                onClick={() => modal.display(
+                  "Share list",
+                  () => <ShareList id={listId} />
+                )}
+              />
               <HiOutlineTrash
                 size={20}
                 class="cursor-pointer"
