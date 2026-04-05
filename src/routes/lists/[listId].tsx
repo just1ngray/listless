@@ -1,4 +1,4 @@
-import { A, useParams } from "@solidjs/router";
+import { useParams } from "@solidjs/router";
 import { For } from "solid-js";
 import { createResource, Suspense } from "solid-js";
 import * as ed from "@noble/ed25519";
@@ -6,7 +6,6 @@ import {
   HiOutlineShare,
   HiOutlineTrash,
   HiOutlinePencilSquare,
-  HiSolidArrowLeft,
   HiOutlineArrowPath,
 } from "solid-icons/hi";
 
@@ -20,6 +19,7 @@ import { useModal } from "~/components/Modal";
 import { EditListName } from "~/components/EditListName";
 import { ConfirmDeleteList } from "~/components/ConfirmDeleteList";
 import { ShareList } from "~/components/ShareList";
+import { HomeHeader } from "~/components/HomeHeader";
 
 
 async function fetchList(listId: string) {
@@ -169,12 +169,7 @@ export default function List() {
 
   return (
     <div class="flex flex-col gap-2">
-      <Card>
-        <A href="/" class="font-bold text-2xl flex gap-2 items-center">
-          <HiSolidArrowLeft size={24} />
-          Listless
-        </A>
-      </Card>
+      <HomeHeader />
       <Card>
         <Suspense fallback={<p>Loading...</p>}>
 

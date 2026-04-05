@@ -22,7 +22,8 @@ export default function Home() {
 
           <p class="text-muted-foreground">
             Share lists with your other devices or friends by giving them a link.
-            To get started, create a list below!
+            To get started, create a list below! By using this Listless you agree
+            to the <a class="underline" href="/terms">terms of service</a>.
           </p>
         </div>
       </Card>
