@@ -1,9 +1,11 @@
 import { MetaProvider, Title, Meta } from "@solidjs/meta";
-import { Router } from "@solidjs/router";
+import { Router, useLocation } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 import { Suspense } from "solid-js";
-import "./app.css";
+
 import { ModalProvider } from "./components/Modal";
+import { NavHome } from "./components/NavHome";
+import "./app.css";
 
 
 export default function App() {
@@ -17,7 +19,11 @@ export default function App() {
           <div class="min-h-dvh bg-background text-foreground flex justify-center">
             <div class="w-full max-w-md p-2 font-sans">
               <ModalProvider>
-                <Suspense>{props.children}</Suspense>
+                <Suspense>
+                  <NavHome>
+                    {props.children}
+                  </NavHome>
+                </Suspense>
               </ModalProvider>
             </div>
           </div>

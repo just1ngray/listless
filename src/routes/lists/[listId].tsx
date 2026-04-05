@@ -19,7 +19,7 @@ import { useModal } from "~/components/Modal";
 import { EditListName } from "~/components/EditListName";
 import { ConfirmDeleteList } from "~/components/ConfirmDeleteList";
 import { ShareList } from "~/components/ShareList";
-import { HomeHeader } from "~/components/HomeHeader";
+import { NavHome } from "~/components/NavHome";
 
 
 async function fetchList(listId: string) {
@@ -168,73 +168,70 @@ export default function List() {
   }
 
   return (
-    <div class="flex flex-col gap-2">
-      <HomeHeader />
-      <Card>
-        <Suspense fallback={<p>Loading...</p>}>
+    <Card>
+      <Suspense fallback={<p>Loading...</p>}>
 
-          <div class="flex flex-row items-items-start justify-between">
-            <h1 class="text-2xl">{data()?.name}</h1>
-            <div class="flex flex-row gap-2">
-              <HiOutlineArrowPath
-                size={20}
-                class="cursor-pointer"
-                onClick={refetch}
+        <div class="flex flex-row items-items-start justify-between">
+          <h1 class="text-2xl">{data()?.name}</h1>
+          <div class="flex flex-row gap-2">
+            <HiOutlineArrowPath
+              size={20}
+              class="cursor-pointer"
+              onClick={refetch}
+            />
+            <HiOutlinePencilSquare
+              size={20}
+              class="cursor-pointer"
+              onClick={() => modal.display(
+                "Edit list name",
+                () => <EditListName currentName={data()!.name} id={listId} />
+              )}
+            />
+            <HiOutlineShare
+              size={20}
+              class="cursor-pointer"
+              onClick={() => modal.display(
+                "Share list",
+                () => <ShareList id={listId} />
+              )}
+            />
+            <HiOutlineTrash
+              size={20}
+              class="cursor-pointer"
+              onClick={() => modal.display(
+                `Delete '${data()?.name}'`,
+                () => <ConfirmDeleteList id={listId} />
+              )}
+            />
+          </div>
+        </div>
+
+        <For each={data()?.items}>
+          {item => (
+            <div class="bg-background p-2 my-1 rounded-md border border-border border-dashed">
+              <SimpleItem
+                text={item.item}
+                del={() => deleteItem(item.id)}
+                set={(newVal) => updateItem(item.id, newVal)}
               />
-              <HiOutlinePencilSquare
-                size={20}
-                class="cursor-pointer"
-                onClick={() => modal.display(
-                  "Edit list name",
-                  () => <EditListName currentName={data()!.name} id={listId} />
-                )}
-              />
-              <HiOutlineShare
-                size={20}
-                class="cursor-pointer"
-                onClick={() => modal.display(
-                  "Share list",
-                  () => <ShareList id={listId} />
-                )}
-              />
-              <HiOutlineTrash
-                size={20}
-                class="cursor-pointer"
-                onClick={() => modal.display(
-                  `Delete '${data()?.name}'`,
-                  () => <ConfirmDeleteList id={listId} />
-                )}
+            </div>
+          )}
+        </For>
+
+        <div class="bg-background p-2 my-1 rounded-md border border-border border-dashed">
+          <div class="flex flex-row items-center gap-2">
+            <div>Add item</div>
+            <div class="grow border-b border-border">
+              <SimpleItem
+                text={""}
+                del={() => Promise.resolve()}
+                set={(newVal) => addItem(newVal)}
               />
             </div>
           </div>
+        </div>
 
-          <For each={data()?.items}>
-            {item => (
-              <div class="bg-background p-2 my-1 rounded-md border border-border border-dashed">
-                <SimpleItem
-                  text={item.item}
-                  del={() => deleteItem(item.id)}
-                  set={(newVal) => updateItem(item.id, newVal)}
-                />
-              </div>
-            )}
-          </For>
-
-          <div class="bg-background p-2 my-1 rounded-md border border-border border-dashed">
-            <div class="flex flex-row items-center gap-2">
-              <div>Add item</div>
-              <div class="grow border-b border-border">
-                <SimpleItem
-                  text={""}
-                  del={() => Promise.resolve()}
-                  set={(newVal) => addItem(newVal)}
-                />
-              </div>
-            </div>
-          </div>
-
-        </Suspense>
-      </Card>
-    </div>
+      </Suspense>
+    </Card>
   );
 }
