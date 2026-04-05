@@ -51,7 +51,7 @@ export function BrowseLists() {
       <Suspense fallback="Loading...">
         <For each={lists()} fallback={<p class="text-muted-foreground text-sm">No lists</p>}>
           {list => (
-            <A href={`/${list.id}`}
+            <A href={`/lists/${list.id}`}
               class="
                 flex flex-row items-center gap-2
               bg-background
