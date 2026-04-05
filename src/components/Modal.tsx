@@ -33,9 +33,9 @@ export function ModalProvider(props: { children: JSX.Element }) {
             class="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
             onClick={close}
           >
-            <div onClick={e => e.stopPropagation()}>
+            <div onClick={e => e.stopPropagation()} class="p-2">
               <Card>
-                <div class="min-w-32 flex flex-row justify-between pb-4 mb-4 gap-4 border-b border-border">
+                <div class="flex flex-row justify-between pb-4 mb-4 gap-4 border-b border-border">
                   <h1 class="text-2xl">{title()}</h1>
                   <HiOutlineXMark size={32} class="cursor-pointer" onClick={close} />
                 </div>

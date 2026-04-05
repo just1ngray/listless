@@ -12,6 +12,7 @@ import { ItemsService } from "~/listless/items_service";
 import { SimpleItem } from "~/components/items/SimpleItem";
 import { useModal } from "~/components/Modal";
 import { EditListName } from "~/components/EditListName";
+import { ConfirmDeleteList } from "~/components/ConfirmDeleteList";
 
 
 async function fetchList(listId: string) {
@@ -175,7 +176,14 @@ export default function List() {
               )}
             />
             <HiOutlineShare size={20} />
-            <HiOutlineTrash size={20} />
+            <HiOutlineTrash
+              size={20}
+              class="cursor-pointer"
+              onClick={() => modal.display(
+                `Delete '${data()?.name}'`,
+                () => <ConfirmDeleteList id={listId} />
+              )}
+            />
           </div>
         </div>
 
