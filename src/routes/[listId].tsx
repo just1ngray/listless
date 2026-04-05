@@ -1,8 +1,8 @@
-import { useParams } from "@solidjs/router";
+import { A, useParams } from "@solidjs/router";
 import { For } from "solid-js";
 import { createResource, Suspense } from "solid-js";
 import * as ed from "@noble/ed25519";
-import { HiOutlineShare, HiOutlineTrash, HiOutlinePencilSquare } from "solid-icons/hi";
+import { HiOutlineShare, HiOutlineTrash, HiOutlinePencilSquare, HiSolidBars3 } from "solid-icons/hi";
 
 import { Card } from "~/components/Card";
 import * as e2ekey from "~/util/e2e-encrypt";
@@ -161,58 +161,66 @@ export default function List() {
   }
 
   return (
-    <Card>
-      <Suspense fallback={<p>Loading...</p>}>
+    <>
+      <header class="bg-surface border-b border-border p-4 shadow-sm flex items-center justify-between">
+        <A href="/" class="font-bold text-2xl flex gap-2 items-center">
+          <HiSolidBars3 size={32} />
+          Listless
+        </A>
+      </header>
+      <Card>
+        <Suspense fallback={<p>Loading...</p>}>
 
-        <div class="flex flex-row items-items-start justify-between">
-          <h1 class="text-2xl">{data()?.name}</h1>
-          <div class="flex flex-row gap-2">
-            <HiOutlinePencilSquare
-              size={20}
-              class="cursor-pointer"
-              onClick={() => modal.display(
-                "Edit list name",
-                () => <EditListName currentName={data()!.name} id={listId} />
-              )}
-            />
-            <HiOutlineShare size={20} />
-            <HiOutlineTrash
-              size={20}
-              class="cursor-pointer"
-              onClick={() => modal.display(
-                `Delete '${data()?.name}'`,
-                () => <ConfirmDeleteList id={listId} />
-              )}
-            />
-          </div>
-        </div>
-
-        <For each={data()?.items}>
-          {item => (
-            <div class="bg-background p-2 my-1 rounded-md border border-border border-dashed">
-              <SimpleItem
-                text={item.item}
-                del={() => deleteItem(item.id)}
-                set={(newVal) => updateItem(item.id, newVal)}
+          <div class="flex flex-row items-items-start justify-between">
+            <h1 class="text-2xl">{data()?.name}</h1>
+            <div class="flex flex-row gap-2">
+              <HiOutlinePencilSquare
+                size={20}
+                class="cursor-pointer"
+                onClick={() => modal.display(
+                  "Edit list name",
+                  () => <EditListName currentName={data()!.name} id={listId} />
+                )}
               />
-            </div>
-          )}
-        </For>
-
-        <div class="bg-background p-2 my-1 rounded-md border border-border border-dashed">
-          <div class="flex flex-row items-center gap-2">
-            <div>Add item</div>
-            <div class="grow border-b border-border">
-              <SimpleItem
-                text={""}
-                del={() => Promise.resolve()}
-                set={(newVal) => addItem(newVal)}
+              <HiOutlineShare size={20} />
+              <HiOutlineTrash
+                size={20}
+                class="cursor-pointer"
+                onClick={() => modal.display(
+                  `Delete '${data()?.name}'`,
+                  () => <ConfirmDeleteList id={listId} />
+                )}
               />
             </div>
           </div>
-        </div>
 
-      </Suspense>
-    </Card>
+          <For each={data()?.items}>
+            {item => (
+              <div class="bg-background p-2 my-1 rounded-md border border-border border-dashed">
+                <SimpleItem
+                  text={item.item}
+                  del={() => deleteItem(item.id)}
+                  set={(newVal) => updateItem(item.id, newVal)}
+                />
+              </div>
+            )}
+          </For>
+
+          <div class="bg-background p-2 my-1 rounded-md border border-border border-dashed">
+            <div class="flex flex-row items-center gap-2">
+              <div>Add item</div>
+              <div class="grow border-b border-border">
+                <SimpleItem
+                  text={""}
+                  del={() => Promise.resolve()}
+                  set={(newVal) => addItem(newVal)}
+                />
+              </div>
+            </div>
+          </div>
+
+        </Suspense>
+      </Card>
+    </>
   );
 }

@@ -14,10 +14,12 @@ export default function App() {
           <Title>Listless</Title>
           <Meta name="description" content="E2e encrypted no login list app that supports protected lists and multi-client syncing" />
 
-          <div class="min-h-dvh bg-background text-foreground flex flex-col font-sans">
-            <ModalProvider>
-              <Suspense>{props.children}</Suspense>
-            </ModalProvider>
+          <div class="min-h-dvh bg-background text-foreground flex justify-center">
+            <div class="max-w-xl p-2 font-sans">
+              <ModalProvider>
+                <Suspense>{props.children}</Suspense>
+              </ModalProvider>
+            </div>
           </div>
         </MetaProvider>
       )}
