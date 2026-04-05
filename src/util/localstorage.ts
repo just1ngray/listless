@@ -1,3 +1,6 @@
+const KEY_LISTS = "listless::lists";
+
+
 export type LocalStorageList = {
     id: string,
     e2e: string | null,
@@ -5,20 +8,30 @@ export type LocalStorageList = {
 };
 
 export function getLists(): LocalStorageList[] {
-    const lists = JSON.parse(localStorage.getItem("lists") || "[]");
+    const lists = JSON.parse(localStorage.getItem(KEY_LISTS) || "[]");
     return lists;
 }
 
 export function addList(list: LocalStorageList) {
     const lists = getLists();
-    lists.push(list);
-    localStorage.setItem("lists", JSON.stringify(lists));
+    const idx = lists.findIndex(l => l.id == list.id);
+    if (idx >= 0) {
+        lists[idx] = {
+            id: list.id,
+            e2e: list.e2e || lists[idx].e2e,
+            mut: list.mut || lists[idx].mut,
+        };
+    }
+    else {
+        lists.push(list);
+    }
+    localStorage.setItem(KEY_LISTS, JSON.stringify(lists));
 }
 
 export function removeList(id: string) {
     const lists = getLists()
         .filter(list => list.id !== id);
-    localStorage.setItem("lists", JSON.stringify(lists));
+    localStorage.setItem(KEY_LISTS, JSON.stringify(lists));
 }
 
 export function getList(listId: string): LocalStorageList | null {
