@@ -39,15 +39,17 @@ export function SimpleItem(props: {
         <input
           value={val()}
           onInput={e => setVal(e.currentTarget.value)}
-          class="grow p-2 border-0 focus:outline-none focus:ring-0"
+          class="w-0 grow p-2 border-0 focus:outline-none focus:ring-0"
         />
       </div>
 
       <Show when={val() !== props.text}>
         <span class="absolute top-0 right-0">
-          <Button type="reset" col="secondary">
-            Undo
-          </Button>
+          <Show when={props.text.length > 0}>
+            <Button type="reset" col="secondary">
+              Undo
+            </Button>
+          </Show>
           <Button type="submit" col="primary">
             {val().length === 0 ? "Delete" : "Save"}
           </Button>
