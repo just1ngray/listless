@@ -1,15 +1,16 @@
 import { createSignal } from "solid-js";
 import * as ed from "@noble/ed25519";
 
-import { Button } from "./Button";
-import { TextInput } from "./TextInput";
-import { ToggleInput } from "./ToggleInput";
+import { Button } from "../components/Button";
+import { TextInput } from "../components/TextInput";
+import { ToggleInput } from "../components/ToggleInput";
 import * as e2ekey from "~/util/e2e-encrypt";
 import { useNavigate } from "@solidjs/router";
 import { toBase64 } from "~/util/buffers";
+import { Card } from "~/components/Card";
 
 
-export function CreateList() {
+export default function Create() {
   const [name, setName] = createSignal<string>("");
   const [e2e, setE2e] = createSignal(true);
   const [auth, setAuth] = createSignal(true);
@@ -55,13 +56,15 @@ export function CreateList() {
 
     const body = await res.json() as any as { listId: string };
 
-    navigate(`/join/${body.listId}#${redirect.toString()}`, {
+    redirect.append("listId", body.listId);
+
+    navigate(`/join#${redirect.toString()}`, {
       state: { hash: redirect.toString() }
     });
   }
 
   return (
-    <div>
+    <Card>
       <h1 class="text-xl">Create a New List</h1>
 
       <form onSubmit={onSubmit}>
@@ -87,6 +90,6 @@ export function CreateList() {
         </div>
       </form>
 
-    </div>
+    </Card>
   );
 }

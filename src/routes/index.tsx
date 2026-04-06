@@ -1,7 +1,9 @@
+import { A } from "@solidjs/router";
+
 import { BrowseLists } from "~/components/BrowseLists";
 import { Card } from "~/components/Card";
-import { CreateList } from "~/components/CreateList";
 import { WordCycler } from "~/components/WordCycler";
+import { Button } from "~/components/Button";
 
 
 export default function Home() {
@@ -22,8 +24,8 @@ export default function Home() {
 
           <p class="text-muted-foreground">
             Share lists with your other devices or friends by giving them a link.
-            To get started, create a list below! By using this Listless you agree
-            to the <a class="underline" href="/terms">terms of service</a>.
+            By using this Listless you agree to the&nbsp;
+            <a class="underline" href="/terms">terms of service</a>.
           </p>
         </div>
       </Card>
@@ -33,7 +35,16 @@ export default function Home() {
       </Card>
 
       <Card>
-        <CreateList />
+        <p class="mb-4">To get started, join or create a list now!</p>
+
+        <div class="flex flex-row justify-evenly">
+          <A href="/join">
+            <Button col="secondary">Join list</Button>
+          </A>
+          <A href="/create">
+            <Button col="primary">Create new list</Button>
+          </A>
+        </div>
       </Card>
     </main>
   );

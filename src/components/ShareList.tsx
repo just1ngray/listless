@@ -20,21 +20,23 @@ export function ShareList(props: { id: string }) {
 
   const rw = () => {
     const params = new URLSearchParams();
+    params.append("listId", props.id);
     if (e2ekey()) {
       params.append("e2e", e2ekey()!);
     }
     if (mutkey()) {
       params.append("mut", mutkey()!);
     }
-    return `${window.location.origin}/join/${props.id}#${params.toString()}`;
+    return `${window.location.origin}/join#${params.toString()}`;
   };
 
   const ro = () => {
     const params = new URLSearchParams();
+    params.append("listId", props.id);
     if (e2ekey()) {
       params.append("e2e", e2ekey()!);
     }
-    return `${window.location.origin}/join/${props.id}#${params.toString()}`;
+    return `${window.location.origin}/join#${params.toString()}`;
   };
 
   return (
