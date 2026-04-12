@@ -8,6 +8,7 @@ import * as e2ekey from "~/util/e2e-encrypt";
 import { useNavigate } from "@solidjs/router";
 import { toBase64 } from "~/util/buffers";
 import { Card } from "~/components/Card";
+import { PostListRequest, PostListResponse } from "./api/lists";
 
 
 export default function Create() {
@@ -45,19 +46,22 @@ export default function Create() {
       body: JSON.stringify({
         name: btoa(reqName),
         mutkey: listMutKeyPub,
-      })
+      } as PostListRequest)
     });
 
-    if (res.status !== 200) {
+    const body = await res.json() as PostListResponse;
+    if ("error" in body) {
+      alert(body.error);
+      setCreatingFlag(false);
+      return;
+    }
+    else if (!res.ok) {
       alert(await res.text());
       setCreatingFlag(false);
       return;
     }
 
-    const body = await res.json() as any as { listId: string };
-
     redirect.append("listId", body.listId);
-
     navigate(`/join#${redirect.toString()}`, {
       state: { hash: redirect.toString() }
     });
