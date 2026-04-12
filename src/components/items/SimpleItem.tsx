@@ -1,4 +1,6 @@
 import { createSignal, Show } from "solid-js";
+import { HiOutlineArrowUturnLeft, HiOutlineCheck, HiOutlineTrash } from "solid-icons/hi";
+
 import { Button } from "../Button";
 
 
@@ -33,7 +35,7 @@ export function SimpleItem(props: {
       <div class="flex flex-row items-center">
         <span
           onClick={async () => await props.del()}
-          class="w-6 h-6 mx-1 rounded-full border-2 border-border bg-muted cursor-pointer"
+          class="w-4 h-4 mx-1 rounded-full border-2 border-border bg-muted cursor-pointer"
         />
 
         <input
@@ -41,20 +43,21 @@ export function SimpleItem(props: {
           onInput={e => setVal(e.currentTarget.value)}
           class="w-0 grow p-2 border-0 focus:outline-none focus:ring-0"
         />
-      </div>
 
-      <Show when={val() !== props.text}>
-        <span class="absolute top-0 right-0">
+        <Show when={val() !== props.text}>
           <Show when={props.text.length > 0}>
-            <Button type="reset" col="secondary">
-              Undo
+            <Button type="reset" col="secondary" narrow>
+              <HiOutlineArrowUturnLeft />
             </Button>
           </Show>
-          <Button type="submit" col="primary">
-            {val().length === 0 ? "Delete" : "Save"}
+          <Button type="submit" col="primary" narrow>
+            {val().length === 0
+              ? <HiOutlineTrash />
+              : <HiOutlineCheck />
+            }
           </Button>
-        </span>
-      </Show>
+        </Show>
+      </div>
     </form>
   );
 }

@@ -5,6 +5,7 @@ export function Button(props: ParentProps & {
   disabled?: boolean,
   type?: "reset" | "submit" | "button" | "menu" | undefined,
   onClick?: () => void,
+  narrow?: boolean,
 }) {
   const col = () => ({
     primary: "bg-primary text-primary-foreground",
@@ -17,7 +18,7 @@ export function Button(props: ParentProps & {
     <button type={props.type} disabled={props.disabled} onClick={props.onClick}
       class={`
         ${col()}
-        px-5 py-2.5 rounded-md transition
+        ${props.narrow ? "px-2.5" : "px-5"} py-2.5 rounded-md transition
         ${props.disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:opacity-80"}
       `}
     >
