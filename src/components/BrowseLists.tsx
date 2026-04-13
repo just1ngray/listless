@@ -55,7 +55,7 @@ export function BrowseLists() {
               class="
                 flex flex-row items-center gap-2
               bg-background
-                p-2 my-1
+                p-4 my-1
                 rounded-md border border-border border-dashed
                 hover:bg-muted
               "
