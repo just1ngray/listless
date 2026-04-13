@@ -1,4 +1,4 @@
-import { useParams } from "@solidjs/router";
+import { useNavigate, useParams } from "@solidjs/router";
 import { For } from "solid-js";
 import { createResource, Suspense } from "solid-js";
 import * as ed from "@noble/ed25519";
@@ -19,50 +19,53 @@ import { useModal } from "~/components/Modal";
 import { EditListName } from "~/components/EditListName";
 import { ConfirmDeleteList } from "~/components/ConfirmDeleteList";
 import { ShareList } from "~/components/ShareList";
-import { NavHome } from "~/components/NavHome";
+import { useNotification } from "~/components/NotificationsProvider";
 
-
-async function fetchList(listId: string) {
-  const localList = getList(listId);
-  const cryptokey = localList?.e2e ? await e2ekey.importKey(localList?.e2e) : null;
-  let decrypt = (str: string) => Promise.resolve(str);
-  if (cryptokey) {
-    decrypt = (str: string) => e2ekey.decrypt(str, cryptokey);
-  }
-
-  const res = await fetch(`/api/lists/${listId}`);
-
-  if (res.status !== 200) {
-    alert(await res.text());
-    return;
-  }
-
-  const body = await res.json() as {
-    id: string,
-    name: string,
-    createdAt: number,
-    items: {
-      id: number,
-      item: string,
-    }[]
-  };
-
-  return {
-    id: body.id,
-    name: await decrypt(atob(body.name)) || "Unnamed list",
-    createdAt: body.createdAt,
-    items: await Promise.all(
-      body.items.map(async ({ id, item }) => ({ id, item: await decrypt(atob(item)) }))
-    )
-  };
-}
 
 export default function List() {
+  const { notify } = useNotification();
+  const navigate = useNavigate();
   const modal = useModal();
   const params = useParams();
   const listId = params.listId as string;
 
-  const [data, { refetch, mutate }] = createResource(async () => await fetchList(listId));
+  async function fetchList() {
+    const localList = getList(listId);
+    const cryptokey = localList?.e2e ? await e2ekey.importKey(localList?.e2e) : null;
+    let decrypt = (str: string) => Promise.resolve(str);
+    if (cryptokey) {
+      decrypt = (str: string) => e2ekey.decrypt(str, cryptokey);
+    }
+
+    const res = await fetch(`/api/lists/${listId}`);
+
+    if (res.status !== 200) {
+      notify("error", await res.text(), {});
+      navigate("/");
+      return;
+    }
+
+    const body = await res.json() as {
+      id: string,
+      name: string,
+      createdAt: number,
+      items: {
+        id: number,
+        item: string,
+      }[]
+    };
+
+    return {
+      id: body.id,
+      name: await decrypt(atob(body.name)) || "Unnamed list",
+      createdAt: body.createdAt,
+      items: await Promise.all(
+        body.items.map(async ({ id, item }) => ({ id, item: await decrypt(atob(item)) }))
+      )
+    };
+  }
+
+  const [data, { refetch, mutate }] = createResource(async () => await fetchList());
 
   async function deleteItem(itemId: number) {
     const list = getList(listId)!;

@@ -9,9 +9,11 @@ import { useNavigate } from "@solidjs/router";
 import { toBase64 } from "~/util/buffers";
 import { Card } from "~/components/Card";
 import { PostListRequest, PostListResponse } from "./api/lists";
+import { useNotification } from "~/components/NotificationsProvider";
 
 
 export default function Create() {
+  const { notify } = useNotification();
   const [name, setName] = createSignal<string>("");
   const [e2e, setE2e] = createSignal(true);
   const [auth, setAuth] = createSignal(true);
@@ -51,12 +53,12 @@ export default function Create() {
 
     const body = await res.json() as PostListResponse;
     if ("error" in body) {
-      alert(body.error);
+      notify("error", body.error, {});
       setCreatingFlag(false);
       return;
     }
     else if (!res.ok) {
-      alert(await res.text());
+      notify("error", await res.text(), {});
       setCreatingFlag(false);
       return;
     }
