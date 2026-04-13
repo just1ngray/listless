@@ -52,7 +52,7 @@ export function EditListName(props: { currentName: string, id: string }) {
         <TextInput
           value={name()}
           onInput={val => setName(val)}
-          label="New list name" maxlen={64}
+          label="New list name" maxlen={32}
         />
       </div>
 

@@ -74,7 +74,7 @@ export default function Create() {
       <h1 class="text-xl">Create a New List</h1>
 
       <form onSubmit={onSubmit}>
-        <TextInput label="List name" maxlen={64} value={name()} onInput={n => setName(n)} />
+        <TextInput label="List name" maxlen={32} value={name()} onInput={n => setName(n)} />
 
         <div class="my-2 py-2 px-4 border-2 border-border rounded border-dashed flex flex-col gap-2">
           <h3 class="text-lg">Advanced Settings</h3>
