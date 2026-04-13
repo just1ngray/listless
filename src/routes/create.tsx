@@ -27,7 +27,8 @@ export default function Create() {
     const redirect = new URLSearchParams();
 
     let listE2eKey: CryptoKey | null = null;
-    let reqName = name() || `New list (${new Date().toLocaleDateString()})`;
+    const listName = name() || `New list (${new Date().toLocaleDateString()})`;
+    let reqName = listName;
     if (e2e()) {
       listE2eKey = await e2ekey.generateKey();
       reqName = await e2ekey.encrypt(reqName, listE2eKey);
@@ -63,6 +64,7 @@ export default function Create() {
       return;
     }
 
+    notify("success", `Created new list: '${listName}'`, {});
     redirect.append("listId", body.listId);
     navigate(`/join#${redirect.toString()}`, {
       state: { hash: redirect.toString() }

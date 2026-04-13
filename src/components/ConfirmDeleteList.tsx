@@ -3,13 +3,26 @@ import * as ed from "@noble/ed25519";
 import { Button } from "./Button";
 import { getList, removeList } from "~/util/localstorage";
 import { fromBase64, toBase64 } from "~/util/buffers";
+import { useNotification } from "~/components/NotificationsProvider";
+import { useNavigate } from "@solidjs/router";
+import { useModal } from "./Modal";
 
 
-export function ConfirmDeleteList(props: { id: string }) {1
+export function ConfirmDeleteList(props: { id: string }) {
+  const modal = useModal();
+  const { notify } = useNotification();
+  const navigate = useNavigate();
+
   async function deleteList(deleteRemote: boolean) {
+    // while technically this component doesn't care whether it's displayed in a modal or not,
+    // this happens to be the quickest implementation for the only use-case we actually use...
+    modal.close();
+
     const list = getList(props.id);
     if (list === null) {
-      throw new Error("List not found");
+      removeList(props.id);
+      notify("warn", "List does not exist", {});
+      return;
     }
 
     if (deleteRemote) {
@@ -24,12 +37,20 @@ export function ConfirmDeleteList(props: { id: string }) {1
 
       const res = await fetch(`/api/lists/${props.id}`, { method: "DELETE", headers });
       if (res.status !== 200) {
-        throw new Error(await res.text());
+        notify("error", await res.text(), {});
+        return;
       }
+      notify("success", "Deleted list!", {});
+    }
+    else {
+      notify("success", [
+        "Left list!",
+        "You can rejoin later with a share link"
+      ], {});
     }
 
     removeList(list.id);
-    window.location.href = "/";
+    navigate("/");
   }
 
   return (

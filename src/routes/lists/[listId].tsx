@@ -39,8 +39,13 @@ export default function List() {
 
     const res = await fetch(`/api/lists/${listId}`);
 
-    if (res.status !== 200) {
-      notify("error", await res.text(), {});
+    if (!res.ok) {
+      let msg = await res.text();
+      if (res.status === 404) {
+        msg = `List with ID '${listId}' not found`;
+      }
+
+      notify("error", msg, {});
       navigate("/");
       return;
     }

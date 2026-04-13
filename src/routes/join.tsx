@@ -2,12 +2,14 @@ import { useNavigate, A, useLocation, useSearchParams } from "@solidjs/router";
 import { onMount, createSignal } from "solid-js";
 import { Button } from "~/components/Button";
 import { Card } from "~/components/Card";
+import { useNotification } from "~/components/NotificationsProvider";
 import { TextInput } from "~/components/TextInput";
 
 import { addList } from "~/util/localstorage";
 
 
 export default function Join() {
+  const { notify } = useNotification();
   const [joinLink, setJoinLink] = createSignal("");
   const location = useLocation<{ hash: string }>();
   const navigate = useNavigate();
@@ -48,6 +50,7 @@ export default function Join() {
       throw new Error("Cannot join null list id");
     }
 
+    notify("success", `Joined list with ID: '${listId}'`, {});
     addList({
       id: listId,
       e2e: e2ekey,
