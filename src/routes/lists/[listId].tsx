@@ -183,12 +183,12 @@ export default function List() {
           <h1 class="text-2xl">{data()?.name}</h1>
           <div class="flex flex-row gap-2">
             <HiOutlineArrowPath
-              size={20}
+              size={24}
               class="cursor-pointer"
               onClick={refetch}
             />
             <HiOutlinePencilSquare
-              size={20}
+              size={24}
               class="cursor-pointer"
               onClick={() => modal.display(
                 "Edit list name",
@@ -196,7 +196,7 @@ export default function List() {
               )}
             />
             <HiOutlineShare
-              size={20}
+              size={24}
               class="cursor-pointer"
               onClick={() => modal.display(
                 "Share list",
@@ -204,7 +204,7 @@ export default function List() {
               )}
             />
             <HiOutlineTrash
-              size={20}
+              size={24}
               class="cursor-pointer"
               onClick={() => modal.display(
                 `Delete '${data()?.name}'`,
