@@ -22,3 +22,11 @@
     --color-error: #ef4444;                 /* Error messages, destructive actions */
     --color-success: #22c55e;               /* Success messages, checks */
 }
+
+@keyframes progress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+.animate-progress {
+  animation: progress var(--animate-progress) linear forwards;
+}

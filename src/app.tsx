@@ -6,6 +6,7 @@ import { Suspense } from "solid-js";
 import { ModalProvider } from "./components/Modal";
 import { NavHome } from "./components/NavHome";
 import "./app.css";
+import { NotificationProvider } from "./components/NotificationsProvider";
 
 
 export default function App() {
@@ -19,11 +20,13 @@ export default function App() {
           <div class="min-h-dvh bg-background text-foreground flex justify-center">
             <div class="w-full max-w-md p-2 font-sans">
               <ModalProvider>
-                <Suspense>
-                  <NavHome>
-                    {props.children}
-                  </NavHome>
-                </Suspense>
+                <NotificationProvider>
+                  <Suspense>
+                    <NavHome>
+                      {props.children}
+                    </NavHome>
+                  </Suspense>
+                </NotificationProvider>
               </ModalProvider>
             </div>
           </div>
