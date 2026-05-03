@@ -1,4 +1,4 @@
-import { MetaProvider, Title, Meta } from "@solidjs/meta";
+import { MetaProvider, Title, Meta, Link } from "@solidjs/meta";
 import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 import { Suspense } from "solid-js";
@@ -16,6 +16,8 @@ export default function App() {
         <MetaProvider>
           <Title>Listless</Title>
           <Meta name="description" content="E2e encrypted no login list app that supports protected lists and multi-client syncing" />
+          <Link rel="manifest" href="/manifest.json" />
+          <Link rel="icon" href="/favicon.png" />
 
           <div class="min-h-dvh bg-background text-foreground flex justify-center">
             <div class="w-full max-w-md p-2 font-sans">
