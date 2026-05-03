@@ -4,6 +4,8 @@ import { BrowseLists } from "~/components/BrowseLists";
 import { Card } from "~/components/Card";
 import { WordCycler } from "~/components/WordCycler";
 import { Button } from "~/components/Button";
+// @ts-ignore (image resizing is supported by vite-imagetools package)
+import listlessLogo from "~/assets/listless.png?w=128&h=128";
 
 
 export default function Home() {
@@ -11,7 +13,10 @@ export default function Home() {
     <main class="flex flex-col gap-2">
       <Card>
         <div class="flex flex-col gap-4">
-          <h1 class="text-2xl text-center">Listless</h1>
+          <div class="flex flex-row items-center justify-center">
+            <img src={listlessLogo} class="h-8" />
+            <h1 class="text-2xl text-center">Listless</h1>
+          </div>
 
           <p>
             Listless is an end-to-end encrypted
