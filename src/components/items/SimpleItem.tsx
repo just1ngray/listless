@@ -6,7 +6,7 @@ import { Button } from "../Button";
 
 export function SimpleItem(props: {
   text: string,
-  del: () => Promise<void>,
+  del: null | (() => Promise<void>),
   set: (newVal: string) => Promise<void>,
 }) {
   const [val, setVal] = createSignal<string>(props.text);
@@ -33,10 +33,13 @@ export function SimpleItem(props: {
   return (
     <form onSubmit={submit} onReset={reset} class="relative">
       <div class="flex flex-row items-center">
-        <span
-          onClick={async () => await props.del()}
-          class="w-4 h-4 mx-1 rounded-full border-2 border-border bg-muted cursor-pointer"
-        />
+        <Show when={props.del}>
+          <button
+            type="button"
+            onClick={async () => await props.del!()}
+            class="w-8 h-8 rounded-full border-2 border-border bg-muted cursor-pointer"
+          />
+        </Show>
 
         <input
           value={val()}

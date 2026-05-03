@@ -232,7 +232,7 @@ export default function List() {
             <div class="grow border-b border-border">
               <SimpleItem
                 text={""}
-                del={() => Promise.resolve()}
+                del={null}
                 set={(newVal) => addItem(newVal)}
               />
             </div>
