@@ -5,7 +5,7 @@ import { Card } from "~/components/Card";
 import { WordCycler } from "~/components/WordCycler";
 import { Button } from "~/components/Button";
 // @ts-ignore (image resizing is supported by vite-imagetools package)
-import listlessLogo from "~/assets/listless.png?w=128&h=128";
+import listlessLogo from "~/assets/listless.png?w=64&h=64";
 
 
 export default function Home() {
