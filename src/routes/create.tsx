@@ -47,7 +47,7 @@ export default function Create() {
     const res = await fetch("/api/lists", {
       method: "POST",
       body: JSON.stringify({
-        name: btoa(reqName),
+        name: toBase64(new TextEncoder().encode(reqName)),
         mutkey: listMutKeyPub,
       } as PostListRequest)
     });

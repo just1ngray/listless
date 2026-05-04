@@ -52,20 +52,21 @@ export default function List() {
 
     const body = await res.json() as {
       id: string,
-      name: string,
+      name: string, // base64 encoded
       createdAt: number,
       items: {
         id: number,
-        item: string,
+        item: string, // base64 encoded
       }[]
     };
 
+    const decoder = new TextDecoder();
     return {
       id: body.id,
-      name: await decrypt(atob(body.name)) || "Unnamed list",
+      name: await decrypt(decoder.decode(fromBase64(body.name))),
       createdAt: body.createdAt,
       items: await Promise.all(
-        body.items.map(async ({ id, item }) => ({ id, item: await decrypt(atob(item)) }))
+        body.items.map(async ({ id, item }) => ({ id, item: await decrypt(decoder.decode(fromBase64(item))) }))
       )
     };
   }
@@ -98,19 +99,15 @@ export default function List() {
   async function updateItem(itemId: number, item: string) {
     const list = getList(listId)!;
 
-    let itemPayloadStr = btoa(item);
-    if (list.e2e !== null) {
-      itemPayloadStr = btoa(await e2ekey.encrypt(
-        item,
-        await e2ekey.importKey(list.e2e),
-      ));
-    }
-    const itemPayload = fromBase64(itemPayloadStr);
+    const payloadStr = list.e2e !== null
+      ? await e2ekey.encrypt(item, await e2ekey.importKey(list.e2e))
+      : item;
+    const payloadBytes = new TextEncoder().encode(payloadStr);
 
     const headers: Record<string, string> = {};
     if (list.mut !== null) {
       const signature = await ed.signAsync(
-        ItemsService.set_messageToSign(BigInt(itemId), itemPayload),
+        ItemsService.set_messageToSign(BigInt(itemId), payloadBytes),
         fromBase64(list.mut)
       );
       headers["X-Signature"] = toBase64(signature);
@@ -120,7 +117,7 @@ export default function List() {
       method: "PUT",
       headers,
       body: JSON.stringify({
-        item: itemPayloadStr,
+        item: toBase64(payloadBytes),
       }),
     });
     if (res.status !== 200) {
@@ -136,21 +133,14 @@ export default function List() {
   async function addItem(item: string) {
     const list = getList(listId)!;
 
-    let itemPayloadStr = btoa(item);
-    if (list.e2e !== null) {
-      itemPayloadStr = btoa(await e2ekey.encrypt(
-        item,
-        await e2ekey.importKey(list.e2e),
-      ));
-    }
-    const itemPayload = fromBase64(itemPayloadStr);
+    const payloadStr = list.e2e !== null
+      ? await e2ekey.encrypt(item, await e2ekey.importKey(list.e2e))
+      : item;
+    const payloadBytes = new TextEncoder().encode(payloadStr);
 
     const headers: Record<string, string> = {};
     if (list.mut !== null) {
-      const signature = await ed.signAsync(
-        itemPayload,
-        fromBase64(list.mut)
-      );
+      const signature = await ed.signAsync(payloadBytes, fromBase64(list.mut));
       headers["X-Signature"] = toBase64(signature);
     }
 
@@ -158,7 +148,7 @@ export default function List() {
       method: "POST",
       headers,
       body: JSON.stringify({
-        item: itemPayloadStr,
+        item: toBase64(payloadBytes),
       }),
     });
     if (res.status !== 200) {
