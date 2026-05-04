@@ -1,9 +1,13 @@
 FROM node:24.14-slim AS builder
+
+ARG LISTLESS_VERSION
+RUN test -n "$LISTLESS_VERSION" || (echo "Must provide --build-arg LISTLESS_VERSION=something" && false)
+
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-RUN npm run build
+RUN LISTLESS_VERSION=$LISTLESS_VERSION npm run build
 
 FROM node:24.14-slim
 WORKDIR /app

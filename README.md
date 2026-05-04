@@ -52,7 +52,7 @@ By default, `npm run build` will generate a Node app that you can run with `npm 
 From the project root.
 
 ```sh
-docker build -t listless .
+docker build -t listless --build-arg LISTLESS_VERSION=commit .
 ```
 
 The resulting image will expose an http server on port `3000`. Be sure to provide the `LISTLESS_DB_FILENAME` environment

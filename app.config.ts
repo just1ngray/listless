@@ -9,7 +9,11 @@ import { imagetools } from "vite-imagetools";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-function gitVersion(): string {
+function getVersion(): string {
+    if (process.env.LISTLESS_VERSION !== undefined) {
+        return process.env.LISTLESS_VERSION;
+    }
+
     const commit = execSync("git rev-parse --short HEAD").toString().trim();
     const dirty = execSync("git status --porcelain").toString().trim();
     return dirty.length > 0
@@ -24,7 +28,7 @@ export default defineConfig({
             imagetools(),
         ],
         define: {
-            __LISTLESS_VERSION__: JSON.stringify(gitVersion()),
+            __LISTLESS_VERSION__: JSON.stringify(getVersion()),
         }
     },
     server: {
